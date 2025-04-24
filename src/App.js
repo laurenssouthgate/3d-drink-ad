@@ -1,5 +1,6 @@
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Float } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei/core/OrbitControls";
+import { Float } from "@react-three/drei/core/Float";
 import { Model } from "./assets/can/Can"
 import { Suspense } from "react";
 import './App.css';

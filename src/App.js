@@ -1,15 +1,31 @@
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei/core/OrbitControls";
-import { Float } from "@react-three/drei/core/Float";
 import { Model } from "./assets/can/Can"
 import { Suspense } from "react";
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { extend, useThree } from '@react-three/fiber';
 import './App.css';
 
-function ErrorBoundary({ children }) {
+// Extend Three.js with OrbitControls
+extend({ OrbitControls });
+
+// Custom OrbitControls component
+function Controls() {
+  const { camera, gl } = useThree();
   return (
-    <div>
+    <orbitControls
+      args={[camera, gl.domElement]}
+      enableZoom={false}
+      enablePan={false}
+    />
+  );
+}
+
+// Custom Float component
+function FloatWrapper({ children, ...props }) {
+  return (
+    <group {...props}>
       {children}
-    </div>
+    </group>
   );
 }
 
@@ -17,35 +33,33 @@ function App() {
   return (
     <div className="App">
       <div className="model">
-        <ErrorBoundary>
-          <Canvas camera={{fov: 50}}>
-                <ambientLight intensity={2} />
-                {/* Top hemisphere lights */}
-                <pointLight position={[0, 10, 0]} intensity={1.5} />
-                <pointLight position={[10, 10, 0]} intensity={1} />
-                <pointLight position={[-10, 10, 0]} intensity={1} />
-                <pointLight position={[0, 10, 10]} intensity={1} />
-                <pointLight position={[0, 10, -10]} intensity={1} />
-                
-                {/* Side hemisphere lights */}
-                <pointLight position={[10, 0, 0]} intensity={0.8} />
-                <pointLight position={[-10, 0, 0]} intensity={0.8} />
-                <pointLight position={[0, 0, 10]} intensity={0.8} />
-                <pointLight position={[0, 0, -10]} intensity={0.8} />
-                
-                {/* Bottom fill lights */}
-                <pointLight position={[0, -10, 0]} intensity={0.5} />
-                <pointLight position={[10, -10, 0]} intensity={0.3} />
-                <pointLight position={[-10, -10, 0]} intensity={0.3} />
-                
-                <Suspense fallback={null}>
-                  <Float rotationIntensity={2}>
-                    <Model position-y={-1.5} scale={1.5}/>
-                  </Float>
-                </Suspense>
-                <OrbitControls enableZoom={false} enablePan={false}/>
-          </Canvas>
-        </ErrorBoundary>
+        <Canvas camera={{fov: 50}}>
+              <ambientLight intensity={2} />
+              {/* Top hemisphere lights */}
+              <pointLight position={[0, 10, 0]} intensity={1.5} />
+              <pointLight position={[10, 10, 0]} intensity={1} />
+              <pointLight position={[-10, 10, 0]} intensity={1} />
+              <pointLight position={[0, 10, 10]} intensity={1} />
+              <pointLight position={[0, 10, -10]} intensity={1} />
+              
+              {/* Side hemisphere lights */}
+              <pointLight position={[10, 0, 0]} intensity={0.8} />
+              <pointLight position={[-10, 0, 0]} intensity={0.8} />
+              <pointLight position={[0, 0, 10]} intensity={0.8} />
+              <pointLight position={[0, 0, -10]} intensity={0.8} />
+              
+              {/* Bottom fill lights */}
+              <pointLight position={[0, -10, 0]} intensity={0.5} />
+              <pointLight position={[10, -10, 0]} intensity={0.3} />
+              <pointLight position={[-10, -10, 0]} intensity={0.3} />
+              
+              <Suspense fallback={null}>
+                <FloatWrapper rotationIntensity={2}>
+                  <Model position-y={-1.5} scale={1.5}/>
+                </FloatWrapper>
+              </Suspense>
+              <Controls />
+        </Canvas>
       </div>
       <div className="text-box">
         <div className="text">
